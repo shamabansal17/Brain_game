@@ -930,7 +930,7 @@ function renderBoard(){
     if(hadErr[key]){cell.classList.add('blink-err');blinkingCells.push(cell);}
     if(hadOk[key]) {cell.classList.add('blink-ok'); blinkingCells.push(cell);}
     (function(rr,cc,el){
-      el.addEventListener('click',  function(e){e.stopPropagation();closePop();selectCell(rr,cc);});
+      el.addEventListener('click',  function(e){e.stopPropagation();focusMobileInput();closePop();selectCell(rr,cc);});
       el.addEventListener('dblclick',function(e){e.stopPropagation();onCellDbl(rr,cc,el);});
     })(r,c,cell);
     boardEl.appendChild(cell);
@@ -939,14 +939,15 @@ function renderBoard(){
 
 function selectCell(r,c){
   selected={r:r,c:c}; renderBoard();
-  /* Focus hidden input only when the on-screen numpad is NOT showing
-     (i.e. touch device with HW keyboard, or desktop) */
+}
+
+function focusMobileInput(){
+  /* Must be called synchronously inside a tap handler — before any async/render work */
   var pad = document.getElementById('mobileNumpad');
   var padVisible = pad && pad.style.display === 'grid';
-  if(!padVisible){
-    var inp = document.getElementById('mobileInput');
-    if(inp){ inp.value=''; inp.focus(); }
-  }
+  if(padVisible) return; /* numpad handles input, no need for keyboard */
+  var inp = document.getElementById('mobileInput');
+  if(inp){ inp.value=''; inp.focus(); }
 }
 
 /* ── MOBILE INPUT & NUMPAD LOGIC ──────────────────────────────
