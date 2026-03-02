@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sudoku Arena</title>
+<title>Celdoku — Where puzzles are made</title>
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Exo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ── RESET & ROOT ─────────────────────────────────────────── */
@@ -37,9 +37,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
   color:var(--muted);letter-spacing:4px;text-transform:uppercase;}
 .setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:720px;margin:20px 0;}
 @media(max-width:560px){.setup-grid{grid-template-columns:1fr;}}
-.sbox{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:18px 20px;}
-.sbox-title{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;
-  color:var(--muted);margin-bottom:12px;}
+.sbox{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:18px 20px;border-top:3px solid var(--accent);}
+.sbox:nth-child(1){border-top-color:var(--accent);}
+.sbox:nth-child(2){border-top-color:var(--accent2);}
+.sbox:nth-child(3){border-top-color:var(--ok);}
+.sbox:nth-child(4){border-top-color:var(--warn);}
+.sbox-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;
+  color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
 /* difficulty grid */
 .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
 .diff-btn{padding:10px 8px;border-radius:var(--r);border:1.5px solid var(--border);
@@ -106,6 +110,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
   justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
 .glogo{font-family:var(--hfont);font-size:1.5rem;color:var(--accent);cursor:pointer;letter-spacing:2px;}
 .glogo:hover{opacity:.8;}
+.back-btn{background:var(--surface);border:1px solid var(--border);border-radius:30px;
+  padding:5px 13px;color:var(--muted);font-family:var(--font);font-size:.74rem;font-weight:700;
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
 .hrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .pill{background:var(--surface);border:1px solid var(--border);border-radius:30px;
   padding:5px 13px;display:flex;align-items:center;gap:5px;font-size:.8rem;font-weight:600;}
@@ -322,11 +330,84 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
      SETUP PAGE
 ══════════════════════════════════════════════ -->
 <div class="page active" id="setupPage">
-  <div class="setup-logo">&#10022; SUDOKU<span>ARENA</span></div>
+  <div class="setup-logo"><svg width="26" height="26" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0"><style>
+  @keyframes cp{0%,100%{opacity:.2;transform:scale(.85);}50%{opacity:1;transform:scale(1.1);}}
+  .c1{animation:cp 2.4s ease-in-out infinite;animation-delay:.0s;transform-origin:7px 7px;}
+  .c2{animation:cp 2.4s ease-in-out infinite;animation-delay:.18s;transform-origin:22px 7px;}
+  .c3{animation:cp 2.4s ease-in-out infinite;animation-delay:.36s;transform-origin:37px 7px;}
+  .c4{animation:cp 2.4s ease-in-out infinite;animation-delay:.54s;transform-origin:7px 22px;}
+  .c5{animation:cp 2.4s ease-in-out infinite;animation-delay:.72s;transform-origin:22px 22px;}
+  .c6{animation:cp 2.4s ease-in-out infinite;animation-delay:.90s;transform-origin:37px 22px;}
+  .c7{animation:cp 2.4s ease-in-out infinite;animation-delay:1.08s;transform-origin:7px 37px;}
+  .c8{animation:cp 2.4s ease-in-out infinite;animation-delay:1.26s;transform-origin:22px 37px;}
+  .c9{animation:cp 2.4s ease-in-out infinite;animation-delay:1.44s;transform-origin:37px 37px;}
+</style>
+  <rect class="c1" x="1"  y="1"  width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="c2" x="16" y="1"  width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="c3" x="31" y="1"  width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="c4" x="1"  y="16" width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="c5" x="16" y="16" width="13" height="13" rx="3" fill="var(--accent2)"/>
+  <rect class="c6" x="31" y="16" width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="c7" x="1"  y="31" width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="c8" x="16" y="31" width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="c9" x="31" y="31" width="13" height="13" rx="3" fill="var(--accent)"/>
+</svg>CELDOKU<span>&#8212; Where puzzles are made</span></div>
+  
 
   <div class="setup-grid">
 
-    <!-- Difficulty -->
+    <!-- BOX 1: THEME -->
+    <div class="sbox">
+      <div class="sbox-title">&#127912; Theme</div>
+      <div class="colour-row" id="colourRow" style="gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+        <div class="cbtn on" data-c="blue"   style="background:#4d96ff" onclick="setColour(this)" title="Blue"></div>
+        <div class="cbtn"    data-c="purple" style="background:#9966dd" onclick="setColour(this)" title="Purple"></div>
+        <div class="cbtn"    data-c="green"  style="background:#5dbb6a" onclick="setColour(this)" title="Green"></div>
+        <div class="cbtn"    data-c="orange" style="background:#ff7c30" onclick="setColour(this)" title="Orange"></div>
+        <div class="cbtn"    data-c="pink"   style="background:#ff5db0" onclick="setColour(this)" title="Pink"></div>
+        <div class="cbtn"    data-c="cyan"   style="background:#00d4ff" onclick="setColour(this)" title="Cyan"></div>
+        <div class="cbtn"    data-c="red"    style="background:#ff3355" onclick="setColour(this)" title="Red"></div>
+        <div class="cbtn"    data-c="gold"   style="background:#ffd700" onclick="setColour(this)" title="Gold"></div>
+        <div class="cbtn"    data-c="teal"   style="background:#00c9a0" onclick="setColour(this)" title="Teal"></div>
+        <div class="cbtn"    data-c="indigo" style="background:#5566ff" onclick="setColour(this)" title="Indigo"></div>
+        <div class="cbtn"    data-c="rose"   style="background:#ff6b8a" onclick="setColour(this)" title="Rose"></div>
+        <div class="cbtn"    data-c="silver" style="background:#aabbcc" onclick="setColour(this)" title="Silver"></div>
+      </div>
+      <div class="sbox-title" style="margin-bottom:8px">&#127756; Atmosphere</div>
+      <div class="atmo-row" id="atmoRow">
+        <button class="abtn on" data-a="none"      onclick="setAtmo(this)">Default</button>
+        <button class="abtn"    data-a="space"     onclick="setAtmo(this)">&#127756; Space</button>
+        <button class="abtn"    data-a="chalk"     onclick="setAtmo(this)">&#128394; Chalk</button>
+        <button class="abtn"    data-a="nature"    onclick="setAtmo(this)">&#127811; Nature</button>
+        <button class="abtn"    data-a="ocean"     onclick="setAtmo(this)">&#127754; Ocean</button>
+        <button class="abtn"    data-a="lava"      onclick="setAtmo(this)">&#128293; Lava</button>
+        <button class="abtn"    data-a="midnight"  onclick="setAtmo(this)">&#127769; Midnight</button>
+        <button class="abtn"    data-a="arctic"    onclick="setAtmo(this)">&#127956; Arctic</button>
+        <button class="abtn"    data-a="desert"    onclick="setAtmo(this)">&#9728; Desert</button>
+        <button class="abtn"    data-a="sakura"    onclick="setAtmo(this)">&#127800; Sakura</button>
+        <button class="abtn"    data-a="halloween" onclick="setAtmo(this)">&#127875; Halloween</button>
+        <button class="abtn"    data-a="winter"    onclick="setAtmo(this)">&#10052; Winter</button>
+      </div>
+      <div class="sbox-title" style="margin-top:12px;margin-bottom:8px">&#127769; Mode</div>
+      <div class="trow">
+        <button class="tchip on" id="dlDarkOn"  onclick="setDL(false)">&#127769; Dark</button>
+        <button class="tchip"    id="dlLightOn" onclick="setDL(true)">&#9728; Light</button>
+      </div>
+    </div>
+
+    <!-- BOX 2: PLAYER NAME + GAME CODE -->
+    <div class="sbox">
+      <div class="sbox-title">&#128100; Player Name</div>
+      <input class="ninput" id="playerNameSetup" placeholder="Your name (for leaderboard)" maxlength="24">
+      <div class="sbox-title" style="margin-top:14px;margin-bottom:8px">&#128279; Load a Game Code</div>
+      <div class="code-row">
+        <input class="ninput" id="setupCodeInput" placeholder="e.g. BG-04829 or GM-12345" maxlength="14" style="margin-bottom:0">
+        <button class="code-btn" onclick="setupLoadCode()">Load</button>
+      </div>
+      <div id="codeLoadMsg" style="font-size:.68rem;margin-top:5px;color:var(--ok);display:none"></div>
+    </div>
+
+    <!-- BOX 3: DIFFICULTY -->
     <div class="sbox">
       <div class="sbox-title">&#127919; Difficulty</div>
       <div class="diff-grid">
@@ -338,7 +419,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
       </div>
     </div>
 
-    <!-- Timer -->
+    <!-- BOX 4: TIMER -->
     <div class="sbox">
       <div class="sbox-title">&#9201; Timer Mode</div>
       <div class="trow">
@@ -347,7 +428,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
         <button class="tchip"         id="sFree" onclick="selTimer('free')">&#9711; Free</button>
       </div>
       <div id="cdSection" style="display:none">
-        <div class="sbox-title" style="margin-bottom:6px">Time limit</div>
+        <div class="sbox-title" style="margin-top:10px;margin-bottom:6px">Time limit</div>
         <div class="cd-presets">
           <button class="cdp" onclick="selCd(5)">5m</button>
           <button class="cdp" onclick="selCd(10)">10m</button>
@@ -364,57 +445,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
       </div>
     </div>
 
-    <!-- Player & Code -->
-    <div class="sbox">
-      <div class="sbox-title">&#128100; Player Name</div>
-      <input class="ninput" id="playerNameSetup" placeholder="Your name (for leaderboard)" maxlength="24">
-      <div class="sbox-title" style="margin-top:14px;margin-bottom:8px">&#128279; Load a Game Code</div>
-      <div class="code-row">
-        <input class="ninput" id="setupCodeInput" placeholder="e.g. GM-04829" maxlength="14" style="margin-bottom:0">
-        <button class="code-btn" onclick="setupLoadCode()">Load</button>
-      </div>
-      <div id="codeLoadMsg" style="font-size:.68rem;margin-top:5px;color:var(--ok);display:none"></div>
-    </div>
-
-    <!-- Theme -->
-    <div class="sbox">
-      <div class="sbox-title">&#127912; Theme</div>
-      <div class="colour-row" id="colourRow" style="gap:6px;flex-wrap:wrap;">
-        <div class="cbtn on" data-c="blue"   style="background:#4d96ff" onclick="setColour(this)" title="Blue"></div>
-        <div class="cbtn"    data-c="purple" style="background:#9966dd" onclick="setColour(this)" title="Purple"></div>
-        <div class="cbtn"    data-c="green"  style="background:#5dbb6a" onclick="setColour(this)" title="Green"></div>
-        <div class="cbtn"    data-c="orange" style="background:#ff7c30" onclick="setColour(this)" title="Orange"></div>
-        <div class="cbtn"    data-c="pink"   style="background:#ff5db0" onclick="setColour(this)" title="Pink"></div>
-        <div class="cbtn"    data-c="cyan"   style="background:#00d4ff" onclick="setColour(this)" title="Cyan"></div>
-        <div class="cbtn"    data-c="red"    style="background:#ff3355" onclick="setColour(this)" title="Red"></div>
-        <div class="cbtn"    data-c="gold"   style="background:#ffd700" onclick="setColour(this)" title="Gold"></div>
-        <div class="cbtn"    data-c="teal"   style="background:#00c9a0" onclick="setColour(this)" title="Teal"></div>
-        <div class="cbtn"    data-c="indigo" style="background:#5566ff" onclick="setColour(this)" title="Indigo"></div>
-        <div class="cbtn"    data-c="rose"   style="background:#ff6b8a" onclick="setColour(this)" title="Rose"></div>
-        <div class="cbtn"    data-c="silver" style="background:#aabbcc" onclick="setColour(this)" title="Silver"></div>
-      </div>
-      <div class="sbox-title" style="margin-top:12px;margin-bottom:6px">Atmosphere</div>
-      <div class="atmo-row" id="atmoRow">
-        <button class="abtn on" data-a="none"     onclick="setAtmo(this)">Default</button>
-        <button class="abtn"    data-a="space"    onclick="setAtmo(this)">&#127756; Space</button>
-        <button class="abtn"    data-a="chalk"    onclick="setAtmo(this)">&#128394; Chalk</button>
-        <button class="abtn"    data-a="nature"   onclick="setAtmo(this)">&#127811; Nature</button>
-        <button class="abtn"    data-a="ocean"    onclick="setAtmo(this)">&#127754; Ocean</button>
-        <button class="abtn"    data-a="lava"     onclick="setAtmo(this)">&#128293; Lava</button>
-        <button class="abtn"    data-a="midnight" onclick="setAtmo(this)">&#127769; Midnight</button>
-        <button class="abtn"    data-a="arctic"   onclick="setAtmo(this)">&#127956; Arctic</button>
-        <button class="abtn"    data-a="desert"   onclick="setAtmo(this)">&#9728; Desert</button>
-        <button class="abtn"    data-a="sakura"   onclick="setAtmo(this)">&#127800; Sakura</button>
-        <button class="abtn"    data-a="halloween" onclick="setAtmo(this)">&#127875; Halloween</button>
-        <button class="abtn"    data-a="winter"   onclick="setAtmo(this)">&#10052; Winter</button>
-      </div>
-      <div class="sbox-title" style="margin-top:12px;margin-bottom:6px">Mode</div>
-      <div class="trow">
-        <button class="tchip on" id="dlDarkOn" onclick="setDL(false)">&#127769; Dark</button>
-        <button class="tchip"    id="dlLightOn" onclick="setDL(true)">&#9728; Light</button>
-      </div>
-    </div>
-
   </div><!-- /setup-grid -->
 
   <button class="start-btn" onclick="startGame()">START GAME &#9654;</button>
@@ -427,8 +457,33 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
 
   <!-- header -->
   <div class="ghdr">
-    <div class="glogo" onclick="goSetup()" title="Back to setup">&#10022; ARENA</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="back-btn" onclick="goSetup()">&#8592; Setup</button>
+      <div class="glogo"><svg width="16" height="16" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:6px;flex-shrink:0"><style>
+  @keyframes cg{0%,100%{opacity:.2;transform:scale(.85);}50%{opacity:1;transform:scale(1.1);}}
+  .g1{animation:cg 2.4s ease-in-out infinite;animation-delay:.0s;transform-origin:7px 7px;}
+  .g2{animation:cg 2.4s ease-in-out infinite;animation-delay:.18s;transform-origin:22px 7px;}
+  .g3{animation:cg 2.4s ease-in-out infinite;animation-delay:.36s;transform-origin:37px 7px;}
+  .g4{animation:cg 2.4s ease-in-out infinite;animation-delay:.54s;transform-origin:7px 22px;}
+  .g5{animation:cg 2.4s ease-in-out infinite;animation-delay:.72s;transform-origin:22px 22px;}
+  .g6{animation:cg 2.4s ease-in-out infinite;animation-delay:.90s;transform-origin:37px 22px;}
+  .g7{animation:cg 2.4s ease-in-out infinite;animation-delay:1.08s;transform-origin:7px 37px;}
+  .g8{animation:cg 2.4s ease-in-out infinite;animation-delay:1.26s;transform-origin:22px 37px;}
+  .g9{animation:cg 2.4s ease-in-out infinite;animation-delay:1.44s;transform-origin:37px 37px;}
+</style>
+  <rect class="g1" x="1"  y="1"  width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="g2" x="16" y="1"  width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="g3" x="31" y="1"  width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="g4" x="1"  y="16" width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="g5" x="16" y="16" width="13" height="13" rx="3" fill="var(--accent2)"/>
+  <rect class="g6" x="31" y="16" width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="g7" x="1"  y="31" width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="g8" x="16" y="31" width="13" height="13" rx="3" fill="var(--accent)"/>
+  <rect class="g9" x="31" y="31" width="13" height="13" rx="3" fill="var(--accent)"/>
+</svg>CELDOKU</div>
+    </div>
     <div class="hrow">
+      <div class="pill" id="playerPill" style="display:none"><span>&#128100;</span><span class="v" id="playerPillName" style="font-family:var(--font);font-size:.8rem;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span></div>
       <div class="pill" id="timerPill">
         <span class="lbl" id="timerLabel"></span>
         <span class="v"   id="timerVal">00:00</span>
@@ -442,7 +497,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
       </div>
       <button class="ibtn" onclick="showOv('lbOv');loadLeaderboard(currentLevel)">&#127942;</button>
       <button class="ibtn" onclick="showOv('shareOv')">&#128279;</button>
-      <button class="ibtn" onclick="showOv('tipsOv')">&#128161;</button>
+      <button class="ibtn" onclick="showOv('tipsOv')">&#128218; Tips</button>
     </div>
   </div>
 
@@ -452,19 +507,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
       <div class="board" id="board"></div>
     </div>
 
-    <!-- TOOLBAR — single row desktop, wraps on mobile -->
+    <!-- TOOLBAR -->
     <div class="toolbar">
 
       <div class="tcard">
-        <div class="tcard-lbl">Game</div>
-        <button class="nbtn" onclick="confirmThen(function(){newGame();},'new')">&#127918; New Game</button>
-        <button class="ubtn" onclick="resetGame()">&#8635; Reset Puzzle</button>
+        <div class="tcard-lbl">Level &amp; Timer</div>
+        <div style="font-size:.72rem;color:var(--accent);font-weight:800" id="levelDisplay">Beginner</div>
+        <div style="font-size:.68rem;color:var(--muted)" id="modeDisplay">Race mode</div>
       </div>
 
       <div class="tcard">
         <div class="tcard-lbl">Moves</div>
         <button class="ubtn" id="undoBtn" onclick="undoMove()" disabled>&#8617; Undo (Ctrl+Z)</button>
-        <button class="hintbtn" id="hintBtn" onclick="useHint()" disabled>&#128161; Hint</button>
+        <button class="hintbtn" id="hintBtn" onclick="useHint()" disabled>&#10024; Hint</button>
       </div>
 
       <div class="tcard">
@@ -474,9 +529,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
       </div>
 
       <div class="tcard">
-        <div class="tcard-lbl">Level &amp; Timer</div>
-        <div style="font-size:.72rem;color:var(--accent);font-weight:800" id="levelDisplay">Beginner</div>
-        <div style="font-size:.68rem;color:var(--muted)" id="modeDisplay">Race mode</div>
+        <div class="tcard-lbl">Game</div>
+        <button class="nbtn" onclick="confirmThen(function(){newGame();},'new')">&#127918; New Game</button>
+        <button class="ubtn" onclick="resetGame()">&#8635; Reset Puzzle</button>
       </div>
 
     </div>
@@ -488,7 +543,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
 <!-- TIPS -->
 <div class="ov" id="tipsOv" onclick="closeOvBg(event,'tipsOv')">
   <div class="ocard" onclick="event.stopPropagation()">
-    <div class="ohead"><div class="otitle">&#128161; How to Solve</div><button class="xbtn" onclick="hideOv('tipsOv')">&#10005;</button></div>
+    <div class="ohead"><div class="otitle">&#128218; How to Solve</div><button class="xbtn" onclick="hideOv('tipsOv')">&#10005;</button></div>
     <div class="tipitem"><div class="tipnum">Rules</div><div class="tiptitle">1-9 once per row, column and box</div><div class="tipdesc">Every row, column and 3×3 box must contain 1-9 exactly once.</div></div>
     <div class="tipitem"><div class="tipnum">Elimination</div><div class="tiptitle">Cross off impossible numbers</div><div class="tipdesc">Look at a blank cell — any digit already in its row, column or box is eliminated. One candidate left? Fill it in.</div></div>
     <div class="tipitem"><div class="tipnum">Scanning</div><div class="tiptitle">Find where a digit must go in a box</div><div class="tipdesc">Pick a digit. In a 3×3 box, if only one cell can hold it, that is its home.</div></div>
@@ -678,11 +733,15 @@ function applyTheme(){
     s.setProperty('--muted','#7080aa'); s.setProperty('--err','#cc2222');
     s.setProperty('--ok','#228844');
   } else {
-    s.setProperty('--bg',    atmo.dBg   ||'#06060f');
-    s.setProperty('--surface',atmo.dCard||'#0e0e1e');
-    s.setProperty('--surface2','#161628');
-    s.setProperty('--border', '#252540'); s.setProperty('--border2','#1c1c35');
-    s.setProperty('--text','#eeeeff'); s.setProperty('--muted','#5a5a88');
+    var dBg=atmo.dBg||'#06060f', dCard=atmo.dCard||'#0e0e1e';
+    /* Derive surface2 and borders from the atmosphere bg so they're always visible */
+    s.setProperty('--bg',     dBg);
+    s.setProperty('--surface',dCard);
+    s.setProperty('--surface2', atmo.dCell||dCard);
+    /* borders: slightly lighter than surface */
+    s.setProperty('--border',  'rgba(255,255,255,.12)');
+    s.setProperty('--border2', 'rgba(255,255,255,.06)');
+    s.setProperty('--text','#eeeeff'); s.setProperty('--muted','rgba(255,255,255,.45)');
     s.setProperty('--err','#ff5555'); s.setProperty('--ok','#44dd88');
   }
   s.setProperty('--accent', col.a); s.setProperty('--accent2', col.a2);
@@ -760,7 +819,7 @@ function setupLoadCode(){
   var raw=document.getElementById('setupCodeInput').value.trim();
   var parsed=codeToLevel(raw);
   var msg=document.getElementById('codeLoadMsg');
-  if(!parsed){msg.style.display='block';msg.style.color='var(--err)';msg.textContent='Invalid code format. Try BG-04829';return;}
+  if(!parsed){msg.style.display='block';msg.style.color='var(--err)';msg.textContent='Invalid code. Use format: BG-04829, GM-12345 etc. (prefix: BG IN AD CH GM)';return;}
   setupCode=parsed;
   /* select matching difficulty button */
   document.querySelectorAll('.diff-btn').forEach(function(b){
@@ -785,6 +844,13 @@ function startGame(){
   }
   /* Pre-fill player name in win form */
   if(playerName) document.getElementById('lbNameInput').value=playerName;
+  /* Show player name on game page */
+  var pp=document.getElementById('playerPill');
+  var pn=document.getElementById('playerPillName');
+  if(pp&&pn){
+    if(playerName){pp.style.display='flex';pn.textContent=playerName;}
+    else pp.style.display='none';
+  }
 }
 function goSetup(){
   confirmThen(function(){
@@ -973,7 +1039,14 @@ var LPFX={beginner:'BG',intermediate:'IN',advanced:'AD',challenging:'CH',grandma
 var LFPFX={'BG':'beginner','IN':'intermediate','AD':'advanced','CH':'challenging','GM':'grandmaster'};
 function levelToCode(lv,seed){return LPFX[lv]+'-'+String(seed).padStart(5,'0');}
 function codeToLevel(code){
-  var p=code.toUpperCase().trim().split('-');
+  if(!code)return null;
+  var s=code.toUpperCase().trim().replace(/\s+/g,'');
+  /* Accept with or without dash: BG-04829 or BG04829 */
+  if(s.indexOf('-')===-1&&s.length>=4){
+    /* Try inserting dash after 2-char prefix */
+    s=s.slice(0,2)+'-'+s.slice(2);
+  }
+  var p=s.split('-');
   if(p.length<2)return null;
   var lv=LFPFX[p[0]],seed=parseInt(p[1]);
   if(!lv||isNaN(seed))return null;
@@ -1069,8 +1142,8 @@ function updateHintUI(){
   var btn=document.getElementById('hintBtn');
   var canHint=hintsMax===Infinity||(hintsUsed<hintsMax);
   btn.disabled=!canHint;
-  btn.textContent=canHint?'&#128161; Hint ('+(hintsMax===Infinity?'&#8734;':(hintsMax-hintsUsed))+')':'No hints left';
-  btn.innerHTML=canHint?'&#128161; Hint ('+(hintsMax===Infinity?'&#8734;':(hintsMax-hintsUsed))+')':'No hints left';
+  btn.textContent=canHint?'&#10024; Hint ('+(hintsMax===Infinity?'&#8734;':(hintsMax-hintsUsed))+')':'No hints left';
+  btn.innerHTML=canHint?'&#10024; Hint ('+(hintsMax===Infinity?'&#8734;':(hintsMax-hintsUsed))+')':'No hints left';
 }
 function useHint(){
   if(hintsMax!==Infinity&&hintsUsed>=hintsMax)return;
@@ -1427,7 +1500,7 @@ function hideWin(){document.getElementById('winOv').classList.remove('show');sto
 /* ================================================================
    LEADERBOARD
 ================================================================ */
-var LB_KEY='sudoku_arena_lb_v3', currentLbTab='beginner';
+var LB_KEY='celdoku_lb_v1', currentLbTab='beginner';
 async function loadLeaderboard(lv){
   currentLbTab=lv||currentLbTab;
   var content=document.getElementById('lbContent');
