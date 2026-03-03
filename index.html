@@ -399,12 +399,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
     <div class="sbox">
       <div class="sbox-title">&#128100; Player Name</div>
       <input class="ninput" id="playerNameSetup" placeholder="Your name (for leaderboard)" maxlength="24">
-      <div class="sbox-title" style="margin-top:14px;margin-bottom:8px">&#128279; Load a Game Code</div>
-      <div class="code-row">
-        <input class="ninput" id="setupCodeInput" placeholder="e.g. BG-04829 or GM-12345" maxlength="14" style="margin-bottom:0">
-        <button class="code-btn" onclick="setupLoadCode()">Load</button>
+
+      <div style="margin-top:16px;background:var(--surface2);border-radius:10px;padding:12px 14px;border:1px dashed var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+          <span style="font-size:1rem">&#128279;</span>
+          <div>
+            <div style="font-size:.72rem;font-weight:800;color:var(--text)">Have a game code?</div>
+            <div style="font-size:.64rem;color:var(--muted);margin-top:1px">Enter it to play that exact puzzle — otherwise a random game starts</div>
+          </div>
+        </div>
+        <div class="code-row">
+          <input class="ninput" id="setupCodeInput" placeholder="e.g. BG-04829 or GM-12345" maxlength="14" style="margin-bottom:0;background:var(--surface)">
+          <button class="code-btn" onclick="setupLoadCode()">Load</button>
+        </div>
+        <div id="codeLoadMsg" style="font-size:.68rem;margin-top:6px;display:none"></div>
       </div>
-      <div id="codeLoadMsg" style="font-size:.68rem;margin-top:5px;color:var(--ok);display:none"></div>
     </div>
 
     <!-- BOX 3: DIFFICULTY -->
