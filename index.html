@@ -399,21 +399,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
     <div class="sbox">
       <div class="sbox-title">&#128100; Player Name</div>
       <input class="ninput" id="playerNameSetup" placeholder="Your name (for leaderboard)" maxlength="24">
-
-      <div style="margin-top:16px;background:var(--surface2);border-radius:10px;padding:12px 14px;border:1px dashed var(--border)">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
-          <span style="font-size:1rem">&#128279;</span>
-          <div>
-            <div style="font-size:.72rem;font-weight:800;color:var(--text)">Have a game code?</div>
-            <div style="font-size:.64rem;color:var(--muted);margin-top:1px">Enter it to play that exact puzzle — otherwise a random game starts</div>
-          </div>
-        </div>
-        <div class="code-row">
-          <input class="ninput" id="setupCodeInput" placeholder="e.g. BG-04829 or GM-12345" maxlength="14" style="margin-bottom:0;background:var(--surface)">
-          <button class="code-btn" onclick="setupLoadCode()">Load</button>
-        </div>
-        <div id="codeLoadMsg" style="font-size:.68rem;margin-top:6px;display:none"></div>
+      <div class="sbox-title" style="margin-top:14px;margin-bottom:8px">&#128279; Load a Game Code</div>
+      <div class="code-row">
+        <input class="ninput" id="setupCodeInput" placeholder="e.g. BG-04829 or GM-12345" maxlength="14" style="margin-bottom:0">
+        <button class="code-btn" onclick="setupLoadCode()">Load</button>
       </div>
+      <div id="codeLoadMsg" style="font-size:.68rem;margin-top:5px;color:var(--ok);display:none"></div>
     </div>
 
     <!-- BOX 3: DIFFICULTY -->
@@ -619,7 +610,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
     <div class="wstats">
       <div class="wsp">Time <span id="wTime">00:00</span></div>
       <div class="wsp">Mistakes <span id="wMiss">0</span></div>
-      <div class="wsp" id="wHintStat">Hints <span id="wHints">0</span></div>
+      <div class="wsp" id="wHintStat">Hints <span id="wHints">0</span><span id="wHintPenalty" style="font-size:.65rem;color:var(--err);margin-left:3px"></span></div>
     </div>
     <div class="lbsubmit" id="lbsubmitBox" style="display:none">
       <div class="lbsubmit-lbl">&#127942; Submit to Leaderboard</div>
@@ -1189,7 +1180,7 @@ function useHint(){
   if(!best)return;
 
   hintsUsed++;
-  if(hintsMax!==Infinity&&hintsUsed>=hintsMax)scoreEligible=false;
+  /* score formula penalises hints — no hard disqualify */
   updateHintUI();
   hintActive=best;
   var el=document.querySelector('.cell[data-r="'+best.r+'"][data-c="'+best.c+'"]');
@@ -1469,9 +1460,11 @@ function calcIQ(lv,secs,miss){
   else{emo='&#127808;';rank='Determined Learner';desc='Keep going!';}
   return{iq:iq,rank:rank,desc:desc,emo:emo};
 }
-function calcScore(lv,secs,miss){
+function calcScore(lv,secs,miss,hints){
+  hints=hints||0;
   var m={beginner:1,intermediate:1.5,advanced:2.2,challenging:3,grandmaster:4.5}[lv];
-  return Math.round((10000/Math.max(secs,1))*m*Math.max(.5,1-miss*.05));
+  var hintPenalty=Math.max(0.6,1-(hints*0.08));
+  return Math.round((10000/Math.max(secs,1))*m*Math.max(.5,1-miss*.05)*hintPenalty);
 }
 
 function checkWin(){
@@ -1479,7 +1472,7 @@ function checkWin(){
   clearInterval(timerInt); timerInt=null;
   if(scoreEligible)addSolveHistory(currentLevel,seconds,mistakes);
   var iq=calcIQ(currentLevel,seconds,mistakes);
-  var sc=calcScore(currentLevel,seconds,mistakes);
+  var sc=calcScore(currentLevel,seconds,mistakes,hintsUsed);
   document.getElementById('wEmoji').innerHTML=iq.emo;
   document.getElementById('wTitle').textContent='Solved!';
   document.getElementById('wSub').textContent=currentLevel.charAt(0).toUpperCase()+currentLevel.slice(1)+' complete!';
@@ -1488,6 +1481,8 @@ function checkWin(){
   document.getElementById('wTime').textContent=fmtTime(seconds);
   document.getElementById('wMiss').textContent=mistakes;
   document.getElementById('wHints').textContent=hintsUsed;
+  var hp=document.getElementById('wHintPenalty');
+  if(hp){if(hintsUsed>0&&hintsMax!==0){hp.textContent='(-'+Math.round(Math.min(40,hintsUsed*8))+'%)';}else hp.textContent='';}
   if(timerMode==='race'&&scoreEligible){
     document.getElementById('lbScoreVal').textContent=sc;
     document.getElementById('scorePill').style.display='block';
@@ -1541,7 +1536,7 @@ async function submitScore(){
   var name=document.getElementById('lbNameInput').value.trim();
   if(!name){alert('Enter your name!');return;}
   playerName=name;
-  var sc=calcScore(currentLevel,seconds,mistakes);
+  var sc=calcScore(currentLevel,seconds,mistakes,hintsUsed);
   var entry={name:name,score:sc,time:seconds,mistakes:mistakes,level:currentLevel,code:currentCode,ts:Date.now()};
   try{
     var res=await window.storage.get(LB_KEY,true);
