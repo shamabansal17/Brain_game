@@ -273,7 +273,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
 .wbtn.secondary:hover{border-color:var(--accent);color:var(--accent);}
 
 /* confirm */
-.cfov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:700;
+.cfov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;
   align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .cfov.show{display:flex;}
 .cfcard{background:var(--surface);border:2px solid var(--accent);border-radius:var(--r2);
@@ -296,7 +296,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
 .cfbtn.secondary:hover{border-color:var(--accent);color:var(--accent);}
 
 /* mistake-stop overlay */
-.msov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:600;
+.msov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;
   align-items:center;justify-content:center;padding:16px;}
 .msov.show{display:flex;}
 .mscard{background:var(--surface);border:2px solid var(--err);border-radius:var(--r2);
@@ -306,7 +306,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
 
 /* toasts */
 .toast{position:fixed;top:40%;left:50%;transform:translate(-50%,-50%)scale(.8);z-index:800;
-  border-radius:16px;padding:12px 20px;text-align:center;pointer-events:none;
+  border-radius:16px;padding:12px 20px;pointer-events:none;
   opacity:0;transition:opacity .18s,transform .18s;min-width:185px;}
 .toast.show{opacity:1;transform:translate(-50%,-50%)scale(1);}
 .toast-icon{font-size:1.6rem;}
