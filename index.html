@@ -604,13 +604,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);
       <div class="iqrank" id="iqRank">Gifted Thinker</div>
     </div>
     <div class="score-pill" id="scorePill" style="display:none">
-      <div class="score-lbl">Leaderboard Score</div>
+      <div class="score-lbl">Leaderboard Score&nbsp;<span id="scoreNote" style="opacity:.9;font-size:.5rem"></span></div>
       <div class="score-val" id="lbScoreVal">0</div>
     </div>
     <div class="wstats">
       <div class="wsp">Time <span id="wTime">00:00</span></div>
       <div class="wsp">Mistakes <span id="wMiss">0</span></div>
-      <div class="wsp" id="wHintStat">Hints <span id="wHints">0</span><span id="wHintPenalty" style="font-size:.65rem;color:var(--err);margin-left:3px"></span></div>
+      <div class="wsp" id="wHintStat">Hints <span id="wHints">0</span><span id="wHintPenalty" style="font-size:.65rem;color:var(--warn);margin-left:3px"></span></div>
     </div>
     <div class="lbsubmit" id="lbsubmitBox" style="display:none">
       <div class="lbsubmit-lbl">&#127942; Submit to Leaderboard</div>
@@ -1202,7 +1202,7 @@ var puzzle=[],solution=[],userBoard=[],given=[];
 var selected=null,mistakes=0,seconds=0;
 var currentLevel='beginner',currentSeed=0,currentCode='';
 var activePop=null,moveHistory=[],blinking=[];
-var mistakeStopped=false;
+var mistakeStopped=false, mistakeLimitReached=false;
 
 /* ================================================================
    GAME CONTROL
@@ -1210,7 +1210,7 @@ var mistakeStopped=false;
 function newGame(seed){
   clearInterval(timerInt); timerInt=null;
   seconds=0; mistakes=0; selected=null; moveHistory=[];
-  mistakeStopped=false; scoreEligible=true;
+  mistakeStopped=false; scoreEligible=true; mistakeLimitReached=false;
   clearBlink(); stopConf();
   clearTimeout(ttE); clearTimeout(ttO);
   document.getElementById('errToast').classList.remove('show');
@@ -1253,7 +1253,7 @@ function resetGame(){
   document.getElementById('msOv').classList.remove('show');
   document.getElementById('timeupOv').classList.remove('show');
   seconds=0; mistakes=0; selected=null; moveHistory=[];
-  mistakeStopped=false; scoreEligible=false; /* reset = no leaderboard */
+  mistakeStopped=false; scoreEligible=false; mistakeLimitReached=false; /* reset = no leaderboard */
   clearBlink(); stopConf();
   clearTimeout(ttE); clearTimeout(ttO);
   document.getElementById('errToast').classList.remove('show');
@@ -1371,8 +1371,9 @@ function checkGroups(row,col){
       g.cells.forEach(function(rc){errC[rc.r+','+rc.c]=1;});
       errN.push(g.n); mistakes++;
       document.getElementById('mistakeVal').textContent=mistakes;
-      /* Check mistake limit */
-      if(hasLimit_[currentLevel]&&mistakes>=MISTAKE_LIMIT){
+      /* Check mistake limit — only show popup once */
+      if(hasLimit_[currentLevel]&&mistakes>=MISTAKE_LIMIT&&!mistakeLimitReached){
+        mistakeLimitReached=true;
         setTimeout(function(){showMsOv();},400);
       }
     }
@@ -1484,7 +1485,7 @@ function checkWin(){
   var hp=document.getElementById('wHintPenalty');
   if(hp){if(hintsUsed>0&&hintsMax!==0){hp.textContent='(-'+Math.round(Math.min(40,hintsUsed*8))+'%)';}else hp.textContent='';}
   if(timerMode==='race'&&scoreEligible){
-    document.getElementById('lbScoreVal').textContent=sc;
+    document.getElementById('lbScoreVal').textContent=sc; var sn=document.getElementById('scoreNote');if(sn)sn.textContent=hintsUsed>0?'(hints: -'+Math.round(Math.min(40,hintsUsed*8))+'%)':'';
     document.getElementById('scorePill').style.display='block';
     document.getElementById('lbsubmitBox').style.display='block';
     if(playerName)document.getElementById('lbNameInput').value=playerName;
@@ -1585,7 +1586,8 @@ function gameActive(){
   return f>0;
 }
 function confirmThen(action,ctx){
-  if(!gameActive()){action();return;}
+  /* Skip confirm if user already acknowledged mistake limit — just go */
+  if(!gameActive()||mistakeLimitReached){action();return;}
   var f=0;for(var r=0;r<9;r++)for(var c=0;c<9;c++)if(!given[r][c]&&userBoard[r][c]!==0)f++;
   document.getElementById('cfTime').textContent=fmtTime(seconds);
   document.getElementById('cfMiss').textContent=mistakes;
