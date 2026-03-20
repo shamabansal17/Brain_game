@@ -1597,8 +1597,7 @@ function gameActive(){
   return f>0;
 }
 function confirmThen(action,ctx){
-  /* Skip confirm if user already acknowledged mistake limit — just go */
-  if(!gameActive()||mistakeLimitReached){action();return;}
+  if(!gameActive()){action();return;}
   var f=0;for(var r=0;r<9;r++)for(var c=0;c<9;c++)if(!given[r][c]&&userBoard[r][c]!==0)f++;
   document.getElementById('cfTime').textContent=fmtTime(seconds);
   document.getElementById('cfMiss').textContent=mistakes;
