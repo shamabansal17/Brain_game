@@ -1592,7 +1592,9 @@ function createChallenge(){
 ================================================================ */
 var pendingCf=null;
 function gameActive(){
-  if(seconds===0)return false;
+  /* A game is active if a puzzle is loaded and either time has passed or cells are filled */
+  if(!puzzle||!puzzle.length)return false;
+  if(seconds>0)return true;
   var f=0;for(var r=0;r<9;r++)for(var c=0;c<9;c++)if(!given[r][c]&&userBoard[r][c]!==0)f++;
   return f>0;
 }
